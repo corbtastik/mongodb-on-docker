@@ -1,9 +1,5 @@
 # MongoDB on Docker
 
-Docker for development environments makes for an easy peazy way to run standalone MongoDB instances on any OS.
-
-This post takes a jaunt through running MongoDB on Docker and shows options for managing data inside and outside of the container.
-
 1. [Build a MongoDB Docker Image](#build-a-mongodb-docker-image)
 1. [Run the MongoDB Image](#run-the-mongodb-image)
 1. [Storing data on the Host](#storing-data-on-the-host)
@@ -14,7 +10,7 @@ This post takes a jaunt through running MongoDB on Docker and shows options for 
 
 ## Build a MongoDB Docker Image
 
-The Dockerfile allows for building 2 types of images, one for [MongoDB Community](https://www.mongodb.com/download-center/community) and one for [MongoDB Enterprise](https://www.mongodb.com/download-center/enterprise).  This is configured by setting the MONGO_PACKAGE and MONGO_REPO variables accordingly.
+The Dockerfile allows for building 2 types of images, one for [MongoDB Community](https://www.mongodb.com/download-center/community) and one for [MongoDB Enterprise](https://www.mongodb.com/download-center/enterprise).  This is configured by setting the MONGO_PACKAGE and MONGO_REPO variables as a build-arg.
 
 Build the MongoDB image from files in [Docker Hub](https://hub.docker.com/_/mongo/) and configure it to use [MongoDB Enterprise](https://www.mongodb.com/download-center/enterprise).  Export the following build-time environment variables, download Docker assets and build a tagged image.
 
@@ -35,7 +31,7 @@ docker build \
 Sending build context to Docker daemon  18.43kB
 ...
 Successfully built 4660c448dfe2
-Successfully tagged corbsmartin/mongo-enterprise:4.2
+Successfully tagged corbsmartin/mongodb-enterprise:4.2
 ```
 
 ## Run the MongoDB Image
@@ -70,7 +66,7 @@ docker exec -it m0 /usr/bin/mongo --eval "db.version()"
 
 ## Storing data on the Host
 
-By default database data will be saved and managed by Docker and for dev environments this works quite well as long you don't remove/delete the container (stopping is ok).  If you'd like to isolate database data files from the container lifeline then mount storage from the host into the container.
+By default db data will be saved and managed by Docker and for dev environments this works quite well as long you don't remove/delete the container (stopping is ok).  If you'd like to isolate db files from the container lifeline then mount storage from the host into the container.
 
 ```bash
 # create a spot for each mongod instance's data files
@@ -85,7 +81,7 @@ docker run --name m0 -p 27017:27017 \
 
 ## Stop the MongoDB Container
 
-Stopping the container will not destroy your data, it will be saved in whatever state it was prior to stopping.  However removing the container from Docker will effectively be deleting your data so take care before removing.
+Stopping the container will not destroy data, it will be saved in whatever state it was prior to stopping.  However removing the container from Docker will.
 
 ```bash
 # stop
